@@ -1,7 +1,6 @@
 library(shiny)
 library(shinydashboard)
 
-source("DTedit.R", encoding = "UTF-8")
 source("personas.R", encoding = "UTF-8")
 source("grupos.R", encoding = "UTF-8")
 

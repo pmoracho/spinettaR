@@ -1,5 +1,7 @@
 library(shiny)
 
+source("DTedit.R", encoding = "UTF-8")
+
 if(!'t_grupos' %in% ls()) {
   #books <- read.csv('books.csv', stringsAsFactors = FALSE)
   t_grupos <- data.frame(grupo_id=numeric(), nombre=character(), stringsAsFactors = FALSE)
@@ -21,17 +23,16 @@ tab_grupos <- function() {
 
 grupos.setup.ui <- function(input, output) {
 
-  DTedit::dtedit(input, output,
-                 name = 'grupos',
-                 thedata = get_grupos(),
-                 edit.cols = c('grupo_id', 'nombre'),
-                 edit.label.cols = c('# Grupo', 'Nombre'),
-                 view.cols = c('grupo_id', 'nombre'),
-                 input.types = c(grupo_id='numericInput', nombre='textInput'),
-                 callback.update = grupos.update.callback,
-                 callback.insert = grupos.insert.callback,
-                 callback.delete = grupos.delete.callback)
-
+  dtedit(input, output,
+         name = 'grupos',
+         thedata = get_grupos(),
+         edit.cols = c('grupo_id', 'nombre'),
+         edit.label.cols = c('# Grupo', 'Nombre'),
+         view.cols = c('grupo_id', 'nombre'),
+         input.types = c(grupo_id='numericInput', nombre='textInput'),
+         callback.update = grupos.update.callback,
+         callback.insert = grupos.insert.callback,
+         callback.delete = grupos.delete.callback)
 }
 
 
