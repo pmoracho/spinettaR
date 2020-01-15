@@ -1,11 +1,11 @@
 library(shiny)
 library(shinydashboard)
 
+source("DTedit.R", encoding = "UTF-8")
 source("personas.R", encoding = "UTF-8")
 source("grupos.R", encoding = "UTF-8")
 
 header <- dashboardHeader(title = "Spinetta App", titleWidth = 230)
-
 
 sidebar <- dashboardSidebar(
   width  = 230,
@@ -30,7 +30,7 @@ body <- dashboardBody(
     tabItem("Personas",personas()),
     tabItem("Personas_Grupos_Versiones","Personas por cada Versión de cada Grupo"),
     tabItem("Obras","Obras"),
-    tabItem("Grupos",grupos()),
+    tabItem("Grupos",tab_grupos()),
     tabItem("Grupos_Versiones","Versiones de cada Grupo")
   )
 )

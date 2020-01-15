@@ -1,16 +1,15 @@
 library(shiny)
 
-if(!'_gruposdb' %in% ls()) {
+if(!'t_grupos' %in% ls()) {
   #books <- read.csv('books.csv', stringsAsFactors = FALSE)
-  T_gruposdb <- data.frame(grupo_id=c(1), nombre=c('Bundleman'), stringsAsFactors = FALSE)
+  t_grupos <- data.frame(grupo_id=numeric(), nombre=character(), stringsAsFactors = FALSE)
 }
 
 get_grupos <- function(){
-  T_gruposdb
+  return(t_grupos)
 }
 
-grupos <- function() {
-
+tab_grupos <- function() {
 
   list(
     h2("Gestión de Grupos"),
@@ -18,15 +17,13 @@ grupos <- function() {
     uiOutput('grupos')
   )
 
-
 }
 
 grupos.setup.ui <- function(input, output) {
 
-  gruposdb <- get_grupos()
   DTedit::dtedit(input, output,
                  name = 'grupos',
-                 thedata = gruposdb,
+                 thedata = get_grupos(),
                  edit.cols = c('grupo_id', 'nombre'),
                  edit.label.cols = c('# Grupo', 'Nombre'),
                  view.cols = c('grupo_id', 'nombre'),
@@ -39,18 +36,18 @@ grupos.setup.ui <- function(input, output) {
 
 
 grupos.insert.callback <- function(data, row) {
-  T_gruposdb <- rbind(data, T_gruposdb)
-  return(get_grupos())
+  t_grupos <- data
+  return(t_grupos)
 }
 
 grupos.update.callback <- function(data, olddata, row) {
-  T_gruposdb[row,] <- data[1,]
-  return(get_grupos())
+  t_grupos <- data
+  return(t_grupos)
 }
 
 grupos.delete.callback <- function(data, row) {
-  T_gruposdb[row,] <- NULL
-  return(get_grupos())
+  t_grupos <- t_grupos[-row,]
+  return(t_grupos)
 }
 
 
