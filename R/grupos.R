@@ -37,7 +37,19 @@ grupos.setup.ui <- function(input, output) {
 
 
 grupos.insert.callback <- function(data, row) {
-  t_grupos <- data
+  errores <- ""
+
+  print(data$nombre[row])
+  print(data$id[row])
+  if (data$nombre[row]=="") {errores <- c(errores, "Debe ingresar un nombre de grupo")}
+  if (is.null(data$id[row])) {errores <- c(errores, "El <id> del grupo es inválido")}
+  print(errores)
+  if (length(errores)!=0) {
+    errores <- c("Errores al insertar el grupo:", "", errores)
+    showNotification(paste0(errores,collapse="\n"), type="error")
+  } else {
+    t_grupos <- data
+  }
   return(t_grupos)
 }
 
