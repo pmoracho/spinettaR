@@ -74,6 +74,8 @@
 #'        return an updated data.frame.
 #' @param callback.insert a function called when the user inserts a new row. This function should
 #'        return an updated data.frame.
+#' @param callback.validate function called before the insert, updaye or delete. This function should
+#'        return an error or warning list
 #' @param click.time.threshold This is to prevent duplicate entries usually by double clicking the
 #'        save or update buttons. If the user clicks the save button again within this amount of
 #'        time (in seconds), the subsequent click will be ignored. Set to zero to disable this
@@ -110,6 +112,7 @@ dtedit <- function(input, output, name, thedata,
                    callback.delete = function(data, row) { },
                    callback.update = function(data, olddata, row) { },
                    callback.insert = function(data, row) { },
+                   callback.validate = function(operation, olddata, data, row) { },
                    click.time.threshold = 2, # in seconds
                    datatable.options = list(pageLength=defaultPageLength)
 ) {
@@ -277,7 +280,6 @@ dtedit <- function(input, output, name, thedata,
       }
     }
     insert.click <<- Sys.time()
-
     newdata <- result$thedata
     row <- nrow(newdata) + 1
     newdata[row,] <- NA
@@ -287,6 +289,11 @@ dtedit <- function(input, output, name, thedata,
       } else {
         newdata[row,i] <- input[[paste0(name, '_add_', i)]]
       }
+    }
+    error_or_warnings <- callback.validate("insert", result$thedata, newdata, row)
+    if (length(error_or_warnings) != 0) {
+      showNotification(paste0(error_or_warnings,collapse="\n"), type="error")
+      return(FALSE)
     }
     tryCatch({
 

@@ -32,24 +32,25 @@ grupos.setup.ui <- function(input, output) {
          input.types = c(grupo_id='numericInput', nombre='textInput'),
          callback.update = grupos.update.callback,
          callback.insert = grupos.insert.callback,
-         callback.delete = grupos.delete.callback)
+         callback.delete = grupos.delete.callback,
+         callback.validate = grupos.validate)
 }
 
+grupos.validate <- function(operation, olddata, data, row){
+
+  errores_or_warnings <- ""
+  print(olddata)
+  print(row)
+  print(data)
+  print(data$id[row])
+  if (data$nombre[row]=="") {errores_or_warnings <- c(errores_or_warnings, "Debe ingresar un nombre de grupo")}
+  if (is.null(data$id[row])) {errores_or_warnings <- c(errores_or_warnings, "El <id> del grupo es inválido")}
+
+  return(errores_or_warnings)
+}
 
 grupos.insert.callback <- function(data, row) {
-  errores <- ""
-
-  print(data$nombre[row])
-  print(data$id[row])
-  if (data$nombre[row]=="") {errores <- c(errores, "Debe ingresar un nombre de grupo")}
-  if (is.null(data$id[row])) {errores <- c(errores, "El <id> del grupo es inválido")}
-  print(errores)
-  if (length(errores)!=0) {
-    errores <- c("Errores al insertar el grupo:", "", errores)
-    showNotification(paste0(errores,collapse="\n"), type="error")
-  } else {
-    t_grupos <- data
-  }
+  t_grupos <- data
   return(t_grupos)
 }
 
