@@ -291,8 +291,10 @@ dtedit <- function(input, output, name, thedata,
       }
     }
     error_or_warnings <- callback.validate("insert", result$thedata, newdata, row)
-    if (length(error_or_warnings) != 0) {
-      showNotification(paste0(error_or_warnings,collapse="\n"), type="error")
+    print(error_or_warnings)
+    print(nrow(error_or_warnings))
+    if (nrow(error_or_warnings) != 0) {
+      showNotification(paste0(error_or_warnings$msg,collapse="\n"), type="error")
       return(FALSE)
     }
     tryCatch({

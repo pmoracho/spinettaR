@@ -1,13 +1,16 @@
 library(shiny)
 
-source("DTedit.R", encoding = "UTF-8")
-
-if(!'t_grupos' %in% ls()) {
-  #books <- read.csv('books.csv', stringsAsFactors = FALSE)
-  t_grupos <- data.frame(grupo_id=numeric(), nombre=character(), stringsAsFactors = FALSE)
+if (!exists("dtedit")) {
+  source("DTedit.R", encoding = "UTF-8")
 }
 
-get_grupos <- function(){
+get_grupos <- function() {
+  grupos.file <- "grupos.Rda"
+  if (file.exists(grupos.file)) {
+    t_grupos = readRDS(grupos.file)
+  } else {
+    t_grupos <- data.frame(grupo_id=numeric(), nombre=character(), stringsAsFactors = FALSE)
+  }
   return(t_grupos)
 }
 
@@ -38,19 +41,21 @@ grupos.setup.ui <- function(input, output) {
 
 grupos.validate <- function(operation, olddata, data, row){
 
-  errores_or_warnings <- ""
-  print(olddata)
-  print(row)
-  print(data)
-  print(data$id[row])
-  if (data$nombre[row]=="") {errores_or_warnings <- c(errores_or_warnings, "Debe ingresar un nombre de grupo")}
-  if (is.null(data$id[row])) {errores_or_warnings <- c(errores_or_warnings, "El <id> del grupo es inválido")}
+  errores_or_warnings <- data.frame(warning=logical(0), msg=character(0))
+
+  if (is.null(data$nombre[row]) | data$nombre[row]=="") {
+    errores_or_warnings <- rbind(errores_or_warnings, list(warning = FALSE, msg="Debe ingresar un nombre de grupo"))
+  }
+  if (data$grupo_id[row] < 1 ) {
+    errores_or_warnings <- rbind(errores_or_warnings, list(warning = TRUE, msg="El grupo_id es inválido"))
+  }
 
   return(errores_or_warnings)
 }
 
 grupos.insert.callback <- function(data, row) {
   t_grupos <- data
+  saveRDS(t_grupos, grupos.file)
   return(t_grupos)
 }
 
@@ -63,5 +68,3 @@ grupos.delete.callback <- function(data, row) {
   t_grupos <- t_grupos[-row,]
   return(t_grupos)
 }
-
-
