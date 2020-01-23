@@ -41,11 +41,12 @@ grupos.setup.ui <- function(input, output) {
 
 grupos.validate <- function(operation, olddata, data, row){
 
-  errores_or_warnings <- data.frame(warning=logical(0), msg=character(0))
+  errores_or_warnings <- data.frame(warning=logical(0), msg=character(0), stringsAsFactors = FALSE)
 
   if (is.null(data$nombre[row]) | data$nombre[row]=="") {
     errores_or_warnings <- rbind(errores_or_warnings, list(warning = FALSE, msg="Debe ingresar un nombre de grupo"))
   }
+  print(data$grupo_id[row])
   if (data$grupo_id[row] < 1 ) {
     errores_or_warnings <- rbind(errores_or_warnings, list(warning = TRUE, msg="El grupo_id es inválido"))
   }
