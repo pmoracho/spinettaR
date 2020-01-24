@@ -51,10 +51,11 @@ grupos.validate <- function(operation, olddata, data, row){
   if (is.null(data$nombre[row]) | data$nombre[row]=="") {
     errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = FALSE, msg="Debe ingresar un nombre de grupo"))
   }
-  str(data)
-  print(data$grupo_id[row])
   if (data$grupo_id[row] < 1 ) {
     errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = TRUE, msg="El grupo_id es inválido"))
+  }
+  if (data$grupo_id[row] %in% data$grupo_id[-row] ) {
+    errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = TRUE, msg="El grupo_id ya existe"))
   }
 
   return(errores_or_warnings)
