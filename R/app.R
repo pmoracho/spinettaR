@@ -16,9 +16,9 @@ sidebar <- dashboardSidebar(
     ),
     menuItem("Tablas", icon = icon("table"),
              menuSubItem("Personas", tabName = "Personas", icon = icon("table")),
-             menuSubItem("Personas/Grupos/Versiones", tabName = "Personas_Grupos_Versiones", icon = icon("table")),
-             menuSubItem("Obras", tabName = "Obras", icon = icon("table")),
              menuSubItem("Grupos", tabName = "Grupos", icon = icon("table")),
+             menuSubItem("Obras", tabName = "Obras", icon = icon("table")),
+             menuSubItem("Personas/Grupos/Versiones", tabName = "Personas_Grupos_Versiones", icon = icon("table")),
              menuSubItem("Grupos/Versiones", tabName = "Grupos_Versiones", icon = icon("table"))
     )
   )
@@ -26,10 +26,10 @@ sidebar <- dashboardSidebar(
 
 body <- dashboardBody(
   tabItems(
-    tabItem("Personas",personas()),
+    tabItem("Personas",tab_personas()),
+    tabItem("Grupos",tab_grupos()),
     tabItem("Personas_Grupos_Versiones","Personas por cada Versión de cada Grupo"),
     tabItem("Obras","Obras"),
-    tabItem("Grupos",tab_grupos()),
     tabItem("Grupos_Versiones","Versiones de cada Grupo")
   )
 )
@@ -39,6 +39,7 @@ shinyApp(
   server = function(input, output) {
 
     grupos.setup.ui(input, output)
+    personas.setup.ui(input, output)
 
   }
 )
