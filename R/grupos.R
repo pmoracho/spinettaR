@@ -34,10 +34,10 @@ grupos.setup.ui <- function(input, output) {
   dtedit(input, output,
          name = 'grupos',
          thedata = get_grupos(),
-         edit.cols = c('grupo_id', 'nombre'),
-         edit.label.cols = c('# Grupo', 'Nombre'),
+         edit.cols = c('nombre'),
+         edit.label.cols = c('Nombre'),
          view.cols = c('grupo_id', 'nombre'),
-         input.types = c(grupo_id='numericInput', nombre='textInput'),
+         input.types = c( nombre='textInput'),
          callback.update = grupos.update.callback,
          callback.insert = grupos.insert.callback,
          callback.delete = grupos.delete.callback,
@@ -51,9 +51,9 @@ grupos.validate <- function(operation, olddata, data, row){
   if (is.null(data$nombre[row]) | data$nombre[row]=="") {
     errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = FALSE, msg="Debe ingresar un nombre de grupo"))
   }
-  if (data$grupo_id[row] < 1 ) {
-    errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = TRUE, msg="El grupo_id es inválido"))
-  }
+  # if (data$grupo_id[row] < 1 ) {
+  #   errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = TRUE, msg="El grupo_id es inválido"))
+  # }
   if (data$grupo_id[row] %in% data$grupo_id[-row] ) {
     errores_or_warnings <- rbind(errores_or_warnings, data.frame(warning = TRUE, msg="El grupo_id ya existe"))
   }
@@ -62,6 +62,7 @@ grupos.validate <- function(operation, olddata, data, row){
 }
 
 grupos.insert.callback <- function(data, row) {
+  data[row,"grupo_id"] <- max(data$grupo_id) + 1
   t_grupos <- data
   saveRDS(t_grupos, grupos.file)
   return(t_grupos)
